@@ -1,0 +1,102 @@
+### ===== AUTH =====
+
+### Inscrire un utilisateur
+POST {{host}}/users/register
+Content-Type: application/json
+
+{
+  "nom": "Dupont",
+  "prenom": "Jean",
+  "email": "jean@example.com",
+  "mot_de_passe": "password123"
+}
+
+### Se connecter (récupérer le token)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "jean@example.com",
+  "mot_de_passe": "password123"
+}
+
+### ===== UTILISATEURS (protégé) =====
+
+### Lister les utilisateurs
+GET {{host}}/users
+Authorization: Bearer {{token}}
+
+### Voir un utilisateur
+GET {{host}}/users/1
+Authorization: Bearer {{token}}
+
+### Supprimer un utilisateur
+DELETE {{host}}/users/1
+Authorization: Bearer {{token}}
+
+### ===== SALLES (protégé) =====
+
+### Créer une salle
+POST {{host}}/salles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nom": "Salle A",
+  "capacite": 20,
+  "localisation": "Bâtiment 1, Étage 2"
+}
+
+### Créer une deuxième salle
+POST {{host}}/salles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nom": "Salle B",
+  "capacite": 10,
+  "localisation": "Bâtiment 1, Étage 1"
+}
+
+### Lister les salles
+GET {{host}}/salles
+Authorization: Bearer {{token}}
+
+### Voir une salle
+GET {{host}}/salles/1
+Authorization: Bearer {{token}}
+
+### Supprimer une salle
+DELETE {{host}}/salles/1
+Authorization: Bearer {{token}}
+
+### ===== RESERVATIONS (protégé) =====
+
+### Créer une réservation
+POST {{host}}/reservations
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "salle_id": 1,
+  "utilisateur_id": 1,
+  "objet": "Réunion d'équipe",
+  "date_debut": "2026-02-15T09:00:00",
+  "date_fin": "2026-02-15T10:00:00"
+}
+
+### Lister les réservations
+GET {{host}}/reservations
+Authorization: Bearer {{token}}
+
+### Voir une réservation
+GET {{host}}/reservations/1
+Authorization: Bearer {{token}}
+
+### Annuler une réservation
+PATCH {{host}}/reservations/1/annuler
+Authorization: Bearer {{token}}
+
+### Supprimer une réservation
+DELETE {{host}}/reservations/1
+Authorization: Bearer {{token}}
