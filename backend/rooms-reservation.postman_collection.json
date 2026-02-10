@@ -1,0 +1,264 @@
+{
+  "info": {
+    "name": "Rooms Reservation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:3080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Inscrire un utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"email\": \"jean@example.com\",\n  \"mot_de_passe\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/users/register",
+              "host": ["{{host}}"],
+              "path": ["users", "register"]
+            }
+          }
+        },
+        {
+          "name": "Se connecter",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('token', jsonData.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jean@example.com\",\n  \"mot_de_passe\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/auth/login",
+              "host": ["{{host}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilisateurs",
+      "item": [
+        {
+          "name": "Lister les utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/users",
+              "host": ["{{host}}"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Voir un utilisateur",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/users/1",
+              "host": ["{{host}}"],
+              "path": ["users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un utilisateur",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/users/1",
+              "host": ["{{host}}"],
+              "path": ["users", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Salles",
+      "item": [
+        {
+          "name": "Créer une salle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Salle A\",\n  \"capacite\": 20,\n  \"localisation\": \"Bâtiment 1, Étage 2\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/salles",
+              "host": ["{{host}}"],
+              "path": ["salles"]
+            }
+          }
+        },
+        {
+          "name": "Lister les salles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/salles",
+              "host": ["{{host}}"],
+              "path": ["salles"]
+            }
+          }
+        },
+        {
+          "name": "Voir une salle",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/salles/1",
+              "host": ["{{host}}"],
+              "path": ["salles", "1"]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une salle",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/salles/1",
+              "host": ["{{host}}"],
+              "path": ["salles", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Créer une réservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salle_id\": 1,\n  \"utilisateur_id\": 1,\n  \"objet\": \"Réunion d'équipe\",\n  \"date_debut\": \"2026-02-15T09:00:00\",\n  \"date_fin\": \"2026-02-15T10:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/reservations",
+              "host": ["{{host}}"],
+              "path": ["reservations"]
+            }
+          }
+        },
+        {
+          "name": "Lister les réservations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/reservations",
+              "host": ["{{host}}"],
+              "path": ["reservations"]
+            }
+          }
+        },
+        {
+          "name": "Voir une réservation",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/reservations/1",
+              "host": ["{{host}}"],
+              "path": ["reservations", "1"]
+            }
+          }
+        },
+        {
+          "name": "Annuler une réservation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/reservations/1/annuler",
+              "host": ["{{host}}"],
+              "path": ["reservations", "1", "annuler"]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une réservation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{host}}/reservations/1",
+              "host": ["{{host}}"],
+              "path": ["reservations", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
