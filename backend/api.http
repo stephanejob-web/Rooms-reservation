@@ -11,7 +11,7 @@ Content-Type: application/json
   "mot_de_passe": "password123"
 }
 
-### Se connecter (récupérer le token)
+### Se connecter (le token est sauvegardé automatiquement)
 POST {{host}}/auth/login
 Content-Type: application/json
 
@@ -19,6 +19,10 @@ Content-Type: application/json
   "email": "jean@example.com",
   "mot_de_passe": "password123"
 }
+
+> {%
+    client.global.set("token", response.body.access_token);
+%}
 
 ### ===== UTILISATEURS (protégé) =====
 
