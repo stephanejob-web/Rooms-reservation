@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import { Loader2, Map as MapIcon, List, Users, MapPin, ArrowRight } from 'lucide-react';
+import { Loader2, Map as MapIcon, List, Users, MapPin, ArrowRight, Box } from 'lucide-react';
 import FloorPlan from '../../components/rooms/FloorPlan';
+import ThreeDFloorPlan from '../../components/rooms/ThreeDFloorPlan';
 
 export default function RoomList() {
     const [rooms, setRooms] = useState<any[]>([]);
     const [reservations, setReservations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
+    const [viewMode, setViewMode] = useState<'list' | '2d' | '3d'>('3d');
 
     useEffect(() => {
         fetchData();
@@ -44,7 +45,7 @@ export default function RoomList() {
         return (
             <div className="flex flex-col items-center justify-center p-16 gap-3">
                 <Loader2 className="animate-spin h-8 w-8 text-indigo-500" />
-                <span className="text-sm text-slate-400 font-medium">Chargement des salles…</span>
+                <span className="text-sm text-slate-400 font-medium">Lancement du moteur 3D…</span>
             </div>
         );
     }
@@ -65,37 +66,47 @@ export default function RoomList() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Salles de réunion</h1>
-                    <p className="text-sm text-slate-400 mt-0.5">{rooms.length} salles disponibles</p>
+                    <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Espaces de travail</h1>
+                    <p className="text-sm text-slate-400 mt-0.5">{rooms.length} salles synchronisées en temps réel</p>
                 </div>
 
                 {/* View toggle */}
-                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/60 shadow-sm">
+                <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200/60 shadow-inner">
                     <button
                         onClick={() => setViewMode('list')}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${viewMode === 'list'
-                            ? 'bg-white text-slate-700 shadow-sm border border-slate-200/60'
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-tighter transition-all duration-300 ${viewMode === 'list'
+                            ? 'bg-white text-slate-800 shadow-md transform scale-105'
                             : 'text-slate-400 hover:text-slate-600'
                             }`}
                     >
-                        <List className="w-3.5 h-3.5" />
+                        <List className="w-4 h-4" />
                         Liste
                     </button>
                     <button
-                        onClick={() => setViewMode('map')}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${viewMode === 'map'
-                            ? 'bg-white text-slate-700 shadow-sm border border-slate-200/60'
+                        onClick={() => setViewMode('2d')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-tighter transition-all duration-300 ${viewMode === '2d'
+                            ? 'bg-white text-slate-800 shadow-md transform scale-105'
                             : 'text-slate-400 hover:text-slate-600'
                             }`}
                     >
-                        <MapIcon className="w-3.5 h-3.5" />
-                        Plan
+                        <MapIcon className="w-4 h-4" />
+                        Plan 2D
+                    </button>
+                    <button
+                        onClick={() => setViewMode('3d')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-tighter transition-all duration-300 ${viewMode === '3d'
+                            ? 'bg-indigo-600 text-white shadow-[0_4px_12px_rgba(79,70,229,0.3)] transform scale-105'
+                            : 'text-slate-400 hover:text-indigo-500'
+                            }`}
+                    >
+                        <Box className="w-4 h-4" />
+                        Vue 3D
                     </button>
                 </div>
             </div>
 
             {/* Content */}
-            {viewMode === 'list' ? (
+            {viewMode === 'list' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {rooms.map((room) => {
                         const status = getRoomStatus(room.id);
@@ -149,9 +160,18 @@ export default function RoomList() {
                         );
                     })}
                 </div>
-            ) : (
+            )}
+
+            {viewMode === '2d' && (
                 <FloorPlan rooms={rooms} reservations={reservations} />
+            )}
+
+            {viewMode === '3d' && (
+                <div className="animate-in fade-in zoom-in-95 duration-700">
+                    <ThreeDFloorPlan rooms={rooms} reservations={reservations} />
+                </div>
             )}
         </div>
     );
 }
+
