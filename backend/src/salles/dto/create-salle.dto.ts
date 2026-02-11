@@ -14,4 +14,9 @@ export class CreateSalleDto {
   @IsOptional()
   @MaxLength(255)
   localisation?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  image?: string;
 }

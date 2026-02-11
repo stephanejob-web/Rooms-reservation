@@ -15,6 +15,9 @@ export class Salle {
   @Column({ type: 'varchar', length: 255, nullable: true })
   localisation: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image: string;
+
   @Column({ type: 'boolean', default: true })
   active: boolean;
 
